@@ -26,6 +26,9 @@ app-emulation/qemu static-user qemu_user_targets_aarch64 qemu_user_targets_riscv
 dev-libs/glib static-libs
 dev-libs/libpcre static-libs
 sys-apps/attr static-libs
+# required by app-misc/neofetch-7.1.0::dev-kit[X]
+# required by neofetch (argument)
+>=www-client/w3m-0.5.3_p20190105 imlib
 EOF
 
 ego sync

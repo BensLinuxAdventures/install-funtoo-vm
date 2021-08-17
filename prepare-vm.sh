@@ -9,7 +9,7 @@ udevadm control --reload-rules && udevadm trigger
 sleep 3
 
 
-parted  /dev/funtoo --script \
+parted  /dev/sda --script \
     mklabel gpt \
     mkpart primary 1MiB 3MiB \
     mkpart primary 3MiB 515MiB \
@@ -47,7 +47,7 @@ mount -t proc none proc
 mount --rbind /sys sys
 mount --rbind /dev dev
 
-wget http://192.168.0.157:8000/in-chroot.sh
-chmod +x in-chroot.sh
+wget http://192.168.0.157:8000/run-in-chroot.sh
+chmod +x run-in-chroot.sh
 
 env -i HOME=/root TERM=$TERM $(which chroot) /mnt/funtoo bash -l
