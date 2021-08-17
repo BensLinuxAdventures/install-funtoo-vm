@@ -3,7 +3,7 @@
 # I am using it to quickly build a Funtoo VM.
 
 #echo 'hostname="FunDevelGen"' > /etc/conf.d/hostname
-echo 'hostname="FunDevelZen2"' > /etc/conf.d/hostname
+echo 'hostname="FunDevlSvr"' > /etc/conf.d/hostname
 
 echo "nameserver 1.1.1.1" > /etc/resolv.conf
 ln -sf /usr/share/zoneinfo/Europe/Dublin /etc/localtime
@@ -22,17 +22,13 @@ mount /var/tmp/portage
 
 cat > /etc/portage/package.use << "EOF"
 sys-kernel/linux-firmware initramfs
-app-emulation/qemu static-user qemu_user_targets_aarch64 qemu_user_targets_riscv64 qemu_user_targets_arm
 dev-libs/glib static-libs
 dev-libs/libpcre static-libs
 sys-apps/attr static-libs
-# required by app-misc/neofetch-7.1.0::dev-kit[X]
-# required by neofetch (argument)
->=www-client/w3m-0.5.3_p20190105 imlib
 EOF
 
 ego sync
-emerge sys-boot/shim grub haveged linux-firmware fchroot eix firefox-bin media-fonts/noto fortune-mod cowsay vim syslog-ng logrotate cronie sudo
+emerge sys-boot/shim grub haveged linux-firmware eix vim syslog-ng logrotate cronie sudo
 
 
 rc-update del swap boot
@@ -63,7 +59,7 @@ grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id="BOOT" --
 cp /usr/share/shim/* /boot/EFI/BOOT/
 ego boot update
 
-epro flavor desktop
+epro flavor server
 
 epro mix-ins vmware-guest
 epro mix-ins -gfxcard-radeon
@@ -71,12 +67,11 @@ epro mix-ins -gfxcard-amdgpu
 epro mix-ins -gfxcard-nvidia
 epro mix-ins -gfxcard-intel
 
-emerge xorg-x11 pulseaudio networkmanager gnome open-vm-tools htop neofetch
+emerge open-vm-tools htop dhcpd
 
-rc-update add xdm
-rc-update add NetworkManager
 rc-update add vmware-tools
 rc-update add sshd
+rc-update add dhcpd
 
 emerge -vuND @world 
 emerge -v --depclean
@@ -113,5 +108,8 @@ alias update='sudo ego sync > /dev/null && sudo eix-sync > /dev/null  && emerge 
 alias m='sudoedit /etc/portage/make.conf'
 alias vm-depl='python -m http.server --directory ~/Documents/Code/install-funtoo-vm'
 EOF
+
+eselect vi set vim
+eselect editor set vi
 
 sync

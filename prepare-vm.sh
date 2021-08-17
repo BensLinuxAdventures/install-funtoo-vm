@@ -38,8 +38,9 @@ mount /dev/funtoo2 /mnt/funtoo/boot
 
 cd /mnt/funtoo
 #wget -c https://build.funtoo.org/1.4-release-std/x86-64bit/generic_64/gnome-latest.tar.xz
-wget -c https://build.funtoo.org/1.4-release-std/x86-64bit/amd64-zen2/2021-07-23/gnome-stage3-amd64-zen2-1.4-release-std-2021-07-23.tar.xz
-tar --numeric-owner --xattrs --xattrs-include='*' -xpf *gnome* && mv *gnome* /mnt/funtoo/mnt && mkdir /mnt/funtoo/mnt/funtoo
+#wget -c https://build.funtoo.org/1.4-release-std/x86-64bit/amd64-zen2/2021-07-23/gnome-stage3-amd64-zen2-1.4-release-std-2021-07-23.tar.xz
+wget -c https://build.funtoo.org/1.4-release-std/x86-64bit/amd64-zen2/2021-07-23/stage3-amd64-zen2-1.4-release-std-2021-07-23.tar.xz
+tar --numeric-owner --xattrs --xattrs-include='*' -xpf *.tar.xz && rm -f *.tar.xz /mnt/funtoo/mnt && mkdir /mnt/funtoo/mnt/funtoo
 
 cd /mnt/funtoo 
 
@@ -47,7 +48,10 @@ mount -t proc none proc
 mount --rbind /sys sys
 mount --rbind /dev dev
 
-wget http://192.168.0.157:8000/run-in-chroot.sh
-chmod +x run-in-chroot.sh
+#wget http://192.168.0.157:8000/run-in-chroot-desktop.sh
+wget http://192.168.0.157:8000/run-in-chroot-server.sh
+
+
+chmod +x run-in-chroot*.sh
 
 env -i HOME=/root TERM=$TERM $(which chroot) /mnt/funtoo bash -l
