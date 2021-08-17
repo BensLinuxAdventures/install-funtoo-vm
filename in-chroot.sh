@@ -3,7 +3,7 @@
 # I am using it to quickly build a Funtoo VM.
 
 #echo 'hostname="FunDevelGen"' > /etc/conf.d/hostname
-echo 'hostname="FunDevelZen"' > /etc/conf.d/hostname
+echo 'hostname="FunDevelZen2"' > /etc/conf.d/hostname
 
 echo "nameserver 1.1.1.1" > /etc/resolv.conf
 ln -sf /usr/share/zoneinfo/Europe/Dublin /etc/localtime
@@ -49,7 +49,7 @@ generate grub
 "Funtoo Linux" {
 kernel kernel[-v]
 initrd initramfs[-v]
-params += real_root=auto rootfstype=auto scandelay=10
+params += real_root=auto rootfstype=auto scandelay=1
 	params += quiet gfxpayload=auto loglevel=1 splash=silent
 }
 EOF
@@ -68,21 +68,47 @@ epro mix-ins -gfxcard-amdgpu
 epro mix-ins -gfxcard-nvidia
 epro mix-ins -gfxcard-intel
 
-emerge xorg-x11 pulseaudio networkmanager gnome open-vm-tools htop
+emerge xorg-x11 pulseaudio networkmanager gnome open-vm-tools htop neofetch
 
 rc-update add xdm
 rc-update add NetworkManager
 rc-update add vmware-tools
 rc-update add sshd
 
-emerge -avuND @world 
-emerge -av --depclean
+emerge -vuND @world 
+emerge -v --depclean
 ego boot update
+
+
+useradd ben
 
 echo -e "VMware123\nVMware123" | passwd ben
 echo -e "VMware123\nVMware123" | passwd root
 
 usermod -G wheel,audio,plugdev,portage ben
 
+cat >> /etc/sudoers << "EOF"
+%wheel ALL=(ALL) NOPASSWD: ALL
+EOF
+
+
+cat >> /home/ben/.bashrc << "EOF"
+source /etc/profile
+export PATH="~/.emacs.d/bin:/home/ben/.cargo/bin:/home/ben/.local/bin:${PATH}"
+
+export PATH=$HOME/Documents/Code/funtoo-metatools/bin:$PATH
+export PYTHONPATH=$HOME/Documents/Code/funtoo-metatools
+
+export TERM=xterm-256color
+
+
+# Aliases
+
+alias b='vim ${HOME}/.bashrc'
+alias emerge='sudo /usr/bin/emerge'
+alias update='sudo ego sync > /dev/null && sudo eix-sync > /dev/null  && emerge --verbose --update --newuse --deep @world && emerge --depclean'
+alias m='sudoedit /etc/portage/make.conf'
+alias vm-depl='python -m http.server --directory ~/Documents/Code/install-funtoo-vm'
+EOF
 
 sync
