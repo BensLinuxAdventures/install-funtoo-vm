@@ -3,7 +3,7 @@
 # I am using it to quickly build a Funtoo VM.
 
 #echo 'hostname="FunDevelGen"' > /etc/conf.d/hostname
-echo 'hostname="FunDevelZen2"' > /etc/conf.d/hostname
+echo 'hostname="FunDevel-Desk"' > /etc/conf.d/hostname
 
 echo "nameserver 1.1.1.1" > /etc/resolv.conf
 ln -sf /usr/share/zoneinfo/Europe/Dublin /etc/localtime
@@ -63,7 +63,6 @@ grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id="BOOT" --
 cp /usr/share/shim/* /boot/EFI/BOOT/
 ego boot update
 
-epro flavor desktop
 
 epro mix-ins vmware-guest
 epro mix-ins -gfxcard-radeon
@@ -71,10 +70,8 @@ epro mix-ins -gfxcard-amdgpu
 epro mix-ins -gfxcard-nvidia
 epro mix-ins -gfxcard-intel
 
-emerge xorg-x11 pulseaudio networkmanager gnome open-vm-tools htop neofetch
+emerge open-vm-tools htop neofetch
 
-rc-update add xdm
-rc-update add NetworkManager
 rc-update add vmware-tools
 rc-update add sshd
 
@@ -85,8 +82,8 @@ ego boot update
 
 useradd ben
 
-echo -e "VMware123\nVMware123" | passwd ben
-echo -e "VMware123\nVMware123" | passwd root
+echo -e "VMware123!\nVMware123!" | passwd ben
+echo -e "VMware123!\nVMware123!" | passwd root
 
 usermod -G wheel,audio,plugdev,portage ben
 
